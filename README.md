@@ -12,3 +12,7 @@ After :
 # Usage
 
  ``./gogiflet travolta.gif``
+
+# Issues 
+
+Unfortunetely transparent background is converted to white color :(
