@@ -11,13 +11,8 @@ var pal color.Palette
 var fullSize image.Rectangle
 
 func initializePalette() {
-	//transparency color
-	cl := color.RGBA{}
-	cl.R = uint8(0)
-	cl.G = uint8(0)
-	cl.B = uint8(0)
-	cl.A = uint8(0)
-	pal = append(pal,cl)
+	//transparency color shall be first one
+	pal = append(pal,color.RGBA{0,0,0,0})
 
 	//I am trying to make us of as much colors as i can and I want to them to vary
 	for i :=0;i<6;i++ {
@@ -32,13 +27,7 @@ func initializePalette() {
 			}
 		}
 	}
-
-	cl = color.RGBA{}
-	cl.R = uint8(255)
-	cl.G = uint8(255)
-	cl.B = uint8(255)
-	cl.A = uint8(255)
-	pal = append(pal,cl)
+	pal = append(pal,color.RGBA{255,255,255,255})
 }
 
 func letterizeGIF(g *gif.GIF) *gif.GIF {
