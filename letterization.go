@@ -9,10 +9,13 @@ import (
 
 var pal color.Palette
 var fullSize image.Rectangle
+var lastImageColors []color.Color
 
 func initializePalette() {
 	//transparency color shall be first one
 	pal = append(pal,color.RGBA{0,0,0,0})
+	//white shall be second
+	pal = append(pal,color.RGBA{255,255,255,255})
 
 	//I am trying to make us of as much colors as i can and I want to them to vary
 	for i :=0;i<6;i++ {
@@ -27,7 +30,6 @@ func initializePalette() {
 			}
 		}
 	}
-	pal = append(pal,color.RGBA{255,255,255,255})
 }
 
 func letterizeGIF(g *gif.GIF) *gif.GIF {
@@ -52,7 +54,18 @@ func letterizeFrame(im *image.Paletted) *image.Paletted {
 			if yBound > fullSize.Size().Y {
 				yBound = fullSize.Size().Y
 			}
-			avgColors = append(avgColors, getAverageColor(im,x,y,xBound,yBound))
+			nextColor :=  getAverageColor(im,x,y,xBound,yBound)
+			if nextColor == nil {
+				//Nil means that the color was transparent or it was not set
+				if len(lastImageColors) > 0 {
+					//We check from transparent color to the color from last frame
+					nextColor = lastImageColors[len(avgColors)]
+				} else {
+					//Only on first frame - we set transparency as white
+ 					nextColor = color.RGBA{255,255,255,255}
+				}
+			}
+			avgColors = append(avgColors,nextColor)
 			if yBound == fullSize.Size().Y{
 				break
 			}
@@ -85,6 +98,7 @@ func letterizeFrame(im *image.Paletted) *image.Paletted {
 			break
 		}
 	}
+	lastImageColors = avgColors
 	return newImage
 }
 
@@ -96,7 +110,7 @@ func getAverageColor(im *image.Paletted, x0,y0,x,y int) color.Color{
 	}
 	cl := im.At((x+x0)/2,(y+y0)/2)
 	if _,_,_,a := cl.RGBA(); a ==0 {
-		return  nil
+		return  color.RGBA{255,255,255,255}
 	}
 
 	return cl
@@ -113,7 +127,7 @@ func drawLetter(im *image.Paletted, x0,y0,xEnd,yEnd int,cl color.Color, letterIn
 			if lettersTable[letterIndex][x-x0][y-y0] == 0 {
 				im.SetColorIndex(x, y, uint8(index))
 			} else {
-				im.SetColorIndex(x,y,0)
+				im.SetColorIndex(x,y,1)
 			}
 		}
 	}
