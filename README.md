@@ -16,6 +16,3 @@ After :
 # Issues 
 
 Unfortunetely transparent background is converted to white color :(
-
-# Project 52
-This is program number 2 of my [Project-52](https://github.com/TheMacies/Project-52) project.
