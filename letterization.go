@@ -17,7 +17,7 @@ func initializePalette() {
 	//white shall be second
 	pal = append(pal,color.RGBA{255,255,255,255})
 
-	//I am trying to make us of as much colors as i can and I want to them to vary
+	//I am trying to make  as much colors as i can and I want them to vary
 	for i :=0;i<6;i++ {
 		for j:=0;j<6;j++{
 			for k:=0;k<6;k++{
